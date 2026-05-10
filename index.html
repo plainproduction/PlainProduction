@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平原制作所 | PLAIN PRODUCTION STUDIO</title>
+    <style>
+        /* =========================================
+           1. 自定義字體設定
+           ========================================= */
+        @font-face {
+            font-family: 'Plain-Headline';
+            src: url('fonts/Plain-Headline.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Plain-Body';
+            src: url('fonts/Plain-Body.ttf') format('truetype');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --color-dark: #1a1a1a;
+            --color-gray: #777777;
+            --color-light-gray: #f8f8f8;
+            --color-bg: #ffffff;
+            --font-headline: 'Plain-Headline', "PingFang TC", sans-serif;
+            --font-body: 'Plain-Body', "PingFang TC", sans-serif;
+        }
+
+        /* =========================================
+           2. 基礎樣式
+           ========================================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            color: var(--color-dark);
+            background-color: var(--color-bg);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img { width: 100%; height: auto; display: block; filter: grayscale(20%); transition: 0.5s; object-fit: cover; }
+        img:hover { filter: grayscale(0%); }
+
+        /* 導覽列 */
+        nav {
+            position: fixed;
+            top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center;
+            padding: 30px 60px; z-index: 1000; background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        .logo { font-family: var(--font-headline); font-size: 1.2rem; letter-spacing: 0.3em; }
+        .nav-links a { text-decoration: none; color: var(--color-dark); margin-left: 30px; font-size: 0.75rem; letter-spacing: 0.15em; }
+
+        /* 首屏 Hero Section */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        .hero h1 { font-family: var(--font-headline); font-size: clamp(2.5rem, 8vw, 4rem); letter-spacing: 0.4em; margin-bottom: 20px; }
+        
+        .hero-tags { font-size: 0.85rem; color: var(--color-gray); letter-spacing: 0.3em; font-weight: 100; }
+        .hero-tags .separator { font-style: normal; margin: 0 10px; color: #ddd; }
+
+        /* 通用區塊 */
+        section { padding: 120px 10%; }
+        .section-title { font-family: var(--font-headline); font-size: 1.8rem; margin-bottom: 80px; text-align: center; letter-spacing: 0.25em; }
+
+        /* 服務項目 */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .service-card .img-wrapper { aspect-ratio: 16/9; overflow: hidden; margin-bottom: 25px; background: #eee; }
+        .service-card h3 { font-family: var(--font-headline); font-size: 1.2rem; margin-bottom: 15px; letter-spacing: 0.1em; }
+        .service-card p { color: var(--color-gray); font-size: 0.9rem; text-align: justify; }
+
+        /* 精選作品 */
+        .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
+        .work-item { position: relative; overflow: hidden; background: #eee; aspect-ratio: 16/9; }
+        .work-item img { width: 100%; height: 100%; transition: 0.8s; }
+        .work-info { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.4); display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; color: white; opacity: 0; transition: 0.4s; 
+        }
+        .work-info h4 { font-family: var(--font-headline); font-size: 1.2rem; margin-bottom: 5px; letter-spacing: 0.2em; }
+        .work-info p { font-size: 0.8rem; letter-spacing: 0.1em; opacity: 0.8; }
+        .work-item:hover .work-info { opacity: 1; }
+        .work-item:hover img { transform: scale(1.1); }
+
+        /* 團隊成員 */
+        .team-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .member { text-align: center; cursor: pointer; transition: 0.3s; }
+        .member:hover { opacity: 0.7; }
+        .member .photo-wrapper { aspect-ratio: 3/4; overflow: hidden; margin-bottom: 20px; background: #eee; }
+        .member .name { font-family: var(--font-headline); font-size: 1.1rem; display: block; margin-bottom: 5px; letter-spacing: 0.1em; }
+        .member .title { font-size: 0.75rem; color: var(--color-gray); letter-spacing: 0.2em; }
+
+        /* =========================================
+           3. 懸浮視窗 (Modal) 樣式
+           ========================================= */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px);
+            display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px;
+        }
+        .modal-content {
+            background: white; width: 100%; max-width: 900px;
+            display: grid; grid-template-columns: 1fr 1.2fr;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.1); position: relative;
+            animation: modalFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes modalFadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-photo { background: #eee; height: 100%; min-height: 450px; }
+        .modal-info { padding: 60px; overflow-y: auto; max-height: 85vh; text-align: left; }
+        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 2.5rem; cursor: pointer; color: #ccc; }
+        .close-btn:hover { color: #000; }
+        .modal-info h2 { font-family: var(--font-headline); font-size: 2rem; margin-bottom: 10px; }
+        .info-label { font-family: var(--font-headline); font-size: 0.85rem; border-bottom: 1px solid #eee; display: block; margin-top: 30px; margin-bottom: 10px; padding-bottom: 5px; color: var(--color-dark); }
+        .info-text { font-size: 0.9rem; color: var(--color-gray); white-space: pre-line; }
+
+        /* =========================================
+           4. 響應式調整
+           ========================================= */
+        @media (max-width: 768px) {
+            nav { padding: 20px; } 
+            .nav-links { display: none; }
+            section { padding: 80px 8%; }
+            .hero-tags span { display: block; margin-bottom: 8px; }
+            .hero-tags .separator { display: none; }
+            .work-grid, .team-container, .modal-content { grid-template-columns: 1fr; }
+            .modal-photo { height: 350px; min-height: auto; }
+            .modal-info { padding: 40px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">平原制作所</div>
+        <div class="nav-links">
+            <a href="#services">SERVICES</a>
+            <a href="#works">WORKS</a>
+            <a href="#team">TEAM</a>
+            <a href="#contact">CONTACT</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- 首屏 -->
+        <section class="hero">
+            <h1>平原制作所</h1>
+            <p class="hero-tags">
+                <span>INTEGRATED MARKETING</span><i class="separator">｜</i>
+                <span>VIDEO PRODUCTION</span><i class="separator">｜</i>
+                <span>Public Relations</span>
+            </p>
+        </section>
+
+        <!-- 服務項目 -->
+        <section id="services">
+            <h2 class="section-title">專業項目</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="img-wrapper"><img src="images/service-marketing.jpg" alt="整合行銷"></div>
+                    <h3>整合行銷</h3>
+                    <p>精準品牌定位與跨媒體策略，連結受眾情感，讓行銷不僅是傳播，更是價值的延伸。</p>
+                </div>
+                <div class="service-card">
+                    <div class="img-wrapper"><img src="images/service-video.jpg" alt="影像製作"></div>
+                    <h3>影像製作</h3>
+                    <p>從創意構思到後期調光，以電影感敘事捕捉具張力的視覺語言，打造高品質影像內容。</p>
+                </div>
+                <div class="service-card">
+                    <div class="img-wrapper"><img src="images/service-pr.jpg" alt="媒體公關"></div>
+                    <h3>媒體公關</h3>
+                    <p>深耕媒體關係與聲譽管理，透過精準的公關操作與議題設計，建立穩定品牌影響力。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 精選作品 -->
+        <section id="works" style="background-color: var(--color-light-gray);">
+            <h2 class="section-title">精選作品</h2>
+            <div class="work-grid">
+                <div class="work-item">
+                    <img src="images/work1.jpg" alt="作品 1">
+                    <div class="work-info"><h4>PROJECT ALPHA</h4><p>Video Production / 2026</p></div>
+                </div>
+                <div class="work-item">
+                    <img src="images/work2.jpg" alt="作品 2">
+                    <div class="work-info"><h4>PROJECT BETA</h4><p>Marketing Strategy / 2026</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 團隊成員 -->
+        <section id="team">
+            <h2 class="section-title">TEAM</h2>
+            <div class="team-container">
+                <div class="member" onclick="openModal('ning')">
+                    <div class="photo-wrapper"><img src="images/team-ning.jpg" alt="黃奕甯"></div>
+                    <span class="name">黃奕甯</span>
+                    <span class="title">Neo</span>
+                </div>
+                <div class="member" onclick="openModal('yu')">
+                    <div class="photo-wrapper"><img src="images/team-yu.jpg" alt="曾韋瑜"></div>
+                    <span class="name">曾韋瑜</span>
+                    <span class="title">Zoey</span>
+                </div>
+                <div class="member" onclick="openModal('wei')">
+                    <div class="photo-wrapper"><img src="images/team-wei.jpg" alt="莊甯幃"></div>
+                    <span class="name">莊甯幃</span>
+                    <span class="title">NWei</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" style="text-align: center;">
+            <p style="font-family: var(--font-headline); font-size: 1.2rem; letter-spacing: 0.2em;">hello@plainproduction.com</p>
+        </section>
+    </main>
+
+    <!-- 懸浮視窗結構 -->
+    <div class="modal-overlay" id="memberModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-photo" id="modalImg" style="background-size: cover; background-position: center;"></div>
+            <div class="modal-info">
+                <h2 id="modalName">姓名</h2>
+                <span id="modalRole" style="font-size: 0.8rem; letter-spacing: 0.2em; color: #999; text-transform: uppercase;">職稱</span>
+                
+                <span class="info-label">專業項目 / Expertise</span>
+                <p class="info-text" id="modalExpert"></p>
+
+                <span class="info-label">案件經歷 / Experience</span>
+                <p class="info-text" id="modalExp"></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 PLAIN PRODUCTION STUDIO.</footer>
+
+    <script>
+        const teamData = {
+            'ning': {
+                name: '黃奕甯', role: 'Neo / Partner', img: 'images/team-ning.jpg',
+                expert: '整合行銷策略、品牌識別設計、市場動察分析。',
+                exp: '• 2025 全聯產品展演專案經理\n• 傳統藝術中心行銷策略顧問'
+            },
+            'yu': {
+                name: '曾韋瑜', role: 'Zoey / Partner', img: 'images/team-yu.jpg',
+                expert: '媒體公關關係、活動企劃執行、社群經營管理。',
+                exp: '• 2026 頭城鱻魚祭公關總召\n• 多場品牌記者會主持人'
+            },
+            'wei': {
+                name: '莊甯幃', role: 'NWei / Partner', img: 'images/team-wei.jpg',
+                expert: '影像拍攝製作、後期剪輯調色、空拍攝影。',
+                exp: '• 2025《鬧龍宮》紀錄片主剪\n• 傳統藝術中心影像典藏專案'
+            }
+        };
+
+        function openModal(id) {
+            const data = teamData[id];
+            document.getElementById('modalName').innerText = data.name;
+            document.getElementById('modalRole').innerText = data.role;
+            document.getElementById('modalExpert').innerText = data.expert;
+            document.getElementById('modalExp').innerText = data.exp;
+            document.getElementById('modalImg').style.backgroundImage = `url(${data.img})`;
+            document.getElementById('memberModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('memberModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('memberModal')) closeModal();
+        }
+    </script>
+</body>
+</html>
