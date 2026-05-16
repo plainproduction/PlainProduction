@@ -16,7 +16,7 @@
             --color-gray: #777777;
             --color-light-gray: #f8f8f8;
             --color-bg: #ffffff;
-            --color-border-gray: #e5e5e5; /* 依要求：指定灰色元素與邊框色彩 */
+            --color-border-gray: #e5e5e5; /* 指定灰色元素與邊框色彩 */
             --font-headline: 'Plain-Headline', "PingFang TC", sans-serif;
             --font-body: 'Plain-Body', "PingFang TC", sans-serif;
         }
@@ -107,44 +107,32 @@
         .team-main-photo { aspect-ratio: 16/9; overflow: hidden; background: #eee; margin-bottom: 30px; }
 
         /* =========================================
-           3. 👑 執行製作與 LOGO 牆控制 (含下方標註文字)
+           3. 執行製作與 LOGO 牆控制 (含下方標註文字)
            ========================================= */
         .logo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px 30px; margin-top: 20px; }
-        
-        /* 執行製作項目的直向排版容器 */
-        .production-item { 
-            display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%;
-        }
+        .production-item { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; }
         
         .logo-item { 
             width: 100%; aspect-ratio: 4/3; background: #fdfdfd; border: 1px solid var(--color-border-gray); 
             display: flex; align-items: center; justify-content: center; padding: 25px; text-decoration: none;
         }
         .logo-item img { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(0%); opacity: 1; transition: 0.4s ease; }
+        /* 滑鼠移入時由彩色轉為灰階 */
         .logo-item:hover img { filter: grayscale(100%); opacity: 0.5; transform: scale(1.02); }
-
-        /* LOGO 下方的標註文字樣式 */
-        .production-label {
-            font-size: 0.9rem; color: var(--color-dark); letter-spacing: 0.15em; text-align: center; font-weight: normal;
-        }
+        .production-label { font-size: 0.9rem; color: var(--color-dark); letter-spacing: 0.15em; text-align: center; font-weight: normal; }
 
         /* =========================================
-           4. 👑 媒體合作單排左右滑動 CSS 設定
+           4. 媒體合作單排左右滑動 CSS 設定
            ========================================= */
         .modal-logo-scroll { 
             display: flex; gap: 20px; overflow-x: auto; padding: 15px 5px;
             scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
             scrollbar-width: thin; scrollbar-color: var(--color-border-gray) transparent;
         }
-        /* 隱藏滾動條但保留功能 (可依喜好保留薄軌道) */
         .modal-logo-scroll::-webkit-scrollbar { height: 4px; }
         .modal-logo-scroll::-webkit-scrollbar-thumb { background-color: var(--color-border-gray); border-radius: 4px; }
         .modal-logo-scroll::-webkit-scrollbar-track { background: transparent; }
-        
-        /* 讓水平滑動內的每個 LOGO 方塊維持固定大小 */
-        .modal-logo-scroll .logo-item { 
-            flex: 0 0 220px; scroll-snap-align: start; 
-        }
+        .modal-logo-scroll .logo-item { flex: 0 0 220px; scroll-snap-align: start; }
 
         /* 懸浮視窗基礎設定 */
         .modal-overlay { 
@@ -161,7 +149,7 @@
         .modal-body-padding { padding: 60px; }
         
         .modal-team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; text-align: left; }
-        .modal-member-col h3 { font-family: var(--font-headline); font-size: 1.4rem; margin-bottom: 15px; border-bottom: 1px solid var(--color-border-gray); padding-bottom: 10px; }
+        .modal-member-col h3 { font-family: var(--font-headline); font-size: 1.4rem; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .info-text { font-size: 0.9rem; color: var(--color-gray); white-space: pre-line; margin-bottom: 30px; }
 
         /* 聯絡資訊 */
@@ -252,7 +240,7 @@
                 </div>
             </div>
 
-            <!-- 3. 影音製作 -->
+            <!-- 3. 影音製作 (內嵌 YouTube) -->
             <div class="service-row">
                 <div class="service-header"><h3>影音製作</h3><span class="tag">VIDEO PRODUCTION</span></div>
                 <div class="service-content">
@@ -260,6 +248,7 @@
                     <div class="slider-wrapper">
                         <button class="nav-arrow arrow-left" onclick="moveSlider(this, -1)"></button>
                         <div class="slider-container">
+                            <!-- enablejsapi=1 是滑動自動暫停的核心參數 -->
                             <div class="slider-item"><iframe src="https://www.youtube.com/embed/MQjyCzV_1Xk?enablejsapi=1" allowfullscreen></iframe></div>
                             <div class="slider-item"><iframe src="https://www.youtube.com/embed/2dR80RjAn8o?enablejsapi=1" allowfullscreen></iframe></div>
                             <div class="slider-item"><iframe src="https://www.youtube.com/embed/PcEwAyhtKis?enablejsapi=1" allowfullscreen></iframe></div>
@@ -298,7 +287,7 @@
             </div>
         </section>
 
-        <!-- 👑 執行製作區塊 (PRODUCTIONS - 已導入下方標註文字) -->
+        <!-- 執行製作區塊 (PRODUCTIONS) -->
         <section id="productions" style="max-width: 1200px; margin: 0 auto;">
             <div class="section-title-container">
                 <img src="images/section-logo.png" alt="Icon" class="section-logo-img">
@@ -306,53 +295,45 @@
             </div>
             
             <div class="logo-grid">
-                <!-- 1. 灣聲宮喂 -->
                 <div class="production-item">
                     <a href="https://www.youtube.com/@ONESONGTALK" target="_blank" class="logo-item">
                         <img src="images/partner-1.png" alt="歪歌之聲 ONESONGTALK">
                     </a>
-                    <span class="production-label">《超後台》後製剪接</span>
+                    <span class="production-label">歪歌之聲</span>
                 </div>
                 
-                <!-- 2. 寬月是內設計 -->
                 <div class="production-item">
                     <a href="https://www.youtube.com/@kuanmoon0800" target="_blank" class="logo-item">
                         <img src="images/partner-2.png" alt="館長月亮">
                     </a>
-                    <span class="production-label">《寬限期》後製剪接</span>
+                    <span class="production-label">館長月亮</span>
                 </div>
                 
-                <!-- 3. 項目三 -->
                 <div class="production-item">
                     <div class="logo-item"><img src="images/partner-3.png" alt="執行製作"></div>
                     <span class="production-label">執行項目 A</span>
                 </div>
 
-                <!-- 4. 項目四 -->
                 <div class="production-item">
                     <div class="logo-item"><img src="images/partner-4.png" alt="執行製作"></div>
                     <span class="production-label">執行項目 B</span>
                 </div>
 
-                <!-- 5. 項目五 -->
                 <div class="production-item">
                     <div class="logo-item"><img src="images/partner-5.png" alt="執行製作"></div>
                     <span class="production-label">執行項目 C</span>
                 </div>
 
-                <!-- 6. 項目六 -->
                 <div class="production-item">
                     <div class="logo-item"><img src="images/partner-6.png" alt="執行製作"></div>
                     <span class="production-label">執行項目 D</span>
                 </div>
 
-                <!-- 7. 項目七 -->
                 <div class="production-item">
                     <div class="logo-item"><img src="images/partner-7.png" alt="執行製作"></div>
                     <span class="production-label">執行項目 E</span>
                 </div>
 
-                <!-- 8. 項目八 -->
                 <div class="production-item">
                     <div class="logo-item"><img src="images/partner-8.png" alt="執行製作"></div>
                     <span class="production-label">執行項目 F</span>
@@ -388,11 +369,7 @@
         </section>
     </main>
 
-    <!-- =========================================
-       5. 懸浮視窗結構
-       ========================================= */ -->
-
-    <!-- 👑 媒體合作懸浮視窗 (LOGO 牆已更新為單排滑動) -->
+    <!-- 媒體合作懸浮視窗 -->
     <div class="modal-overlay" id="prModal">
         <div class="modal-content" style="max-width: 900px;">
             <span class="close-btn" onclick="closePrModal()">&times;</span>
@@ -408,18 +385,15 @@
                 <button class="nav-arrow arrow-right" onclick="moveSlider(this, 1)"></button>
             </div>
 
-            <!-- 下方媒體 LOGO 滑動列 -->
             <div class="modal-body-padding">
                 <h2 style="font-family: var(--font-headline); letter-spacing: 0.2em; border-bottom: 2px solid var(--color-border-gray); padding-bottom: 20px; margin-bottom: 20px; font-size: 1.8rem;">媒體合作</h2>
                 <p style="color: var(--color-gray); font-size: 0.9rem; margin-bottom: 30px; letter-spacing: 0.1em;">感謝以下品牌夥伴的信任與合作 (MEDIA PARTNERS)</p>
                 
-                <!-- 👑 已變更為單排左右滑動容器 -->
                 <div class="modal-logo-scroll">
                     <div class="logo-item"><img src="images/media-logo-1.png" alt="媒體夥伴"></div>
                     <div class="logo-item"><img src="images/media-logo-2.png" alt="媒體夥伴"></div>
                     <div class="logo-item"><img src="images/media-logo-3.png" alt="媒體夥伴"></div>
                     <div class="logo-item"><img src="images/media-logo-4.png" alt="媒體夥伴"></div>
-                    <!-- 您可以在此繼續自由追加更多媒體的 logo-item，排版會自動往右延伸滑動 -->
                 </div>
             </div>
         </div>
@@ -431,7 +405,7 @@
             <span class="close-btn" onclick="closeTeamModal()">&times;</span>
             <div class="modal-hero-photo"><img src="images/team-modal-hero.jpg" alt="Plain Team"></div>
             <div class="modal-body-padding">
-                <h2 style="font-family: var(--font-headline); letter-spacing: 0.2em; border-bottom: 2px solid var(--color-border-gray); padding-bottom: 20px; margin-bottom: 40px; font-size: 1.8rem;">ABOUT PLAIN TEAM</h2>
+                <h2 style="font-family: var(--font-headline); letter-spacing: 0.2em; border-bottom: 2px solid #e5e5e5; padding-bottom: 20px; margin-bottom: 40px; font-size: 1.8rem;">ABOUT PLAIN TEAM</h2>
                 <div class="modal-team-grid">
                     <div class="modal-member-col">
                         <h3>黃奕甯</h3>
@@ -455,7 +429,7 @@
     </footer>
 
     <!-- =========================================
-       6. 核心自動循環 JavaScript 控制
+       6. 核心自動循環 & 影片暫停 JavaScript 控制
        ========================================= */ -->
     <script>
         function openTeamModal() { document.getElementById('teamModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
@@ -468,8 +442,16 @@
             if (event.target == document.getElementById('prModal')) closePrModal(); 
         }
 
+        // 輪播控制：整合無限循環 + 滑動暫停影片功能
         function moveSlider(button, direction) {
             const container = button.parentElement.querySelector('.slider-container');
+            
+            // 👑 新增：點擊箭頭滑動時，將當前滑動器內所有播放中的 YouTube 影片暫停
+            const iframes = container.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            });
+
             const items = container.querySelectorAll('.slider-item');
             const totalItems = items.length;
             const width = container.offsetWidth;
