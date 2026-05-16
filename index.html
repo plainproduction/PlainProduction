@@ -117,7 +117,6 @@
             display: flex; align-items: center; justify-content: center; padding: 25px; text-decoration: none;
         }
         .logo-item img { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(0%); opacity: 1; transition: 0.4s ease; }
-        /* 滑鼠移入時由彩色轉為灰階 */
         .logo-item:hover img { filter: grayscale(100%); opacity: 0.5; transform: scale(1.02); }
         .production-label { font-size: 0.9rem; color: var(--color-dark); letter-spacing: 0.15em; text-align: center; font-weight: normal; }
 
@@ -133,6 +132,12 @@
         .modal-logo-scroll::-webkit-scrollbar-thumb { background-color: var(--color-border-gray); border-radius: 4px; }
         .modal-logo-scroll::-webkit-scrollbar-track { background: transparent; }
         .modal-logo-scroll .logo-item { flex: 0 0 220px; scroll-snap-align: start; }
+
+        /* 聯絡資訊全域設定 */
+        .contact-list { list-style: none; margin-top: 40px; text-align: center; }
+        /* 👑 核心優化：增加 white-space: nowrap 強制一句一排不折行 */
+        .contact-list li { margin-bottom: 15px; font-size: 1rem; letter-spacing: 0.1em; color: var(--color-dark); white-space: nowrap; }
+        .contact-list b { font-family: var(--font-headline); font-weight: normal; color: #999; margin-right: 15px; }
 
         /* 懸浮視窗基礎設定 */
         .modal-overlay { 
@@ -152,12 +157,9 @@
         .modal-member-col h3 { font-family: var(--font-headline); font-size: 1.4rem; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .info-text { font-size: 0.9rem; color: var(--color-gray); white-space: pre-line; margin-bottom: 30px; }
 
-        /* 聯絡資訊 */
-        .contact-list { list-style: none; margin-top: 40px; text-align: center; }
-        .contact-list li { margin-bottom: 15px; font-size: 1rem; letter-spacing: 0.1em; color: var(--color-dark); }
-        .contact-list b { font-family: var(--font-headline); font-weight: normal; color: #999; margin-right: 15px; }
-
-        /* 響應式優化 */
+        /* =========================================
+           5. 響應式優化 (手機版)
+           ========================================= */
         @media (max-width: 768px) {
             nav { padding: 20px; } .nav-links { display: none; }
             section { padding: 80px 8%; }
@@ -170,6 +172,10 @@
             .logo-grid { grid-template-columns: repeat(2, 1fr); gap: 30px 15px; }
             .nav-arrow { display: none; }
             .modal-body-padding { padding: 40px 30px; }
+            
+            /* 👑 核心優化：手機版微調聯絡資訊尺寸與字距，確保字串在任何手機上完美容納不溢出 */
+            .contact-list li { font-size: 0.85rem; letter-spacing: 0.05em; }
+            .contact-list b { margin-right: 10px; }
         }
         @media (max-width: 480px) {
             .logo-grid { grid-template-columns: 1fr; }
@@ -244,11 +250,10 @@
             <div class="service-row">
                 <div class="service-header"><h3>影音製作</h3><span class="tag">VIDEO PRODUCTION</span></div>
                 <div class="service-content">
-                    <div class="service-text"><p>從劇本開發到後期調光。專注於電影感敘事，讓品牌故事在螢幕上展現生命力。</p></div>
+                    <div class="service-text"><p>從劇本開發到後期調光。專注於電影感敘事，讓 brand 故事在螢幕上展現生命力。</p></div>
                     <div class="slider-wrapper">
                         <button class="nav-arrow arrow-left" onclick="moveSlider(this, -1)"></button>
                         <div class="slider-container">
-                            <!-- enablejsapi=1 是滑動自動暫停的核心參數 -->
                             <div class="slider-item"><iframe src="https://www.youtube.com/embed/MQjyCzV_1Xk?enablejsapi=1" allowfullscreen></iframe></div>
                             <div class="slider-item"><iframe src="https://www.youtube.com/embed/2dR80RjAn8o?enablejsapi=1" allowfullscreen></iframe></div>
                             <div class="slider-item"><iframe src="https://www.youtube.com/embed/PcEwAyhtKis?enablejsapi=1" allowfullscreen></iframe></div>
@@ -446,7 +451,7 @@
         function moveSlider(button, direction) {
             const container = button.parentElement.querySelector('.slider-container');
             
-            // 👑 新增：點擊箭頭滑動時，將當前滑動器內所有播放中的 YouTube 影片暫停
+            // 點擊箭頭滑動時，將當前滑動器內所有播放中的 YouTube 影片暫停
             const iframes = container.querySelectorAll('iframe');
             iframes.forEach(iframe => {
                 iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
